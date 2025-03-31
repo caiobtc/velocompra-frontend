@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import NavbarLoja from '../components/NavbarLoja';
+import AlertUtils from '../utils/alerts';
 
 const LojaHomePage = () => {
   const navigate = useNavigate();
@@ -20,12 +21,12 @@ const LojaHomePage = () => {
       setProdutos(response.data.content);
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
-      alert('Erro ao carregar produtos.');
+      AlertUtils.erro('Erro ao carregar produtos.');
     }
   };
 
   const handleVerDetalhes = (id) => {
-    navigate(`/loja/produtos/${id}`); // Adicionando a origem
+    navigate(`/loja/produtos/${id}`);
   };
 
   const getImagemPrincipal = (produto) => {

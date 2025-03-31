@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx';
 import NavbarLoja from '../components/NavbarLoja.jsx';
 import { useNavigate } from 'react-router-dom';
+import AlertUtils from '../utils/alerts';
 
 const LojaCarrinhoPage = () => {
   const { carrinho, adicionarAoCarrinho, removerDoCarrinho, limparCarrinho } = useContext(CarrinhoContext);
@@ -34,11 +35,10 @@ const LojaCarrinhoPage = () => {
 
   const handleCalcularFrete = () => {
     if (!cep || cep.length < 8) {
-      alert('Por favor, informe um CEP válido.');
+      AlertUtils.aviso('Por favor, informe um CEP válido.');
       return;
     }
 
-    // Simulação de cálculo de frete para cliente não logado
     setFreteCalculado(true);
   };
 
@@ -58,6 +58,10 @@ const LojaCarrinhoPage = () => {
       default:
         setValorFrete(0);
     }
+  };
+
+  const finalizarCompra = () => {
+    AlertUtils.sucesso('Compra finalizada com sucesso!');
   };
 
   return (
@@ -225,7 +229,7 @@ const LojaCarrinhoPage = () => {
 
                 <button
                   className="btn btn-success"
-                  onClick={() => alert('Compra finalizada com sucesso!')}
+                  onClick={finalizarCompra}
                   disabled={!freteSelecionado}
                 >
                   <i className="bi bi-bag-check me-2"></i> Finalizar Compra

@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import api from '../services/api';
 import { AuthContext } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import AlertUtils from '../utils/alerts';
 
 const LoginPage = () => {
   const { login } = useContext(AuthContext);
@@ -14,21 +15,21 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     try {
       const response = await api.post('/auth/login', { email, senha });
-  
-      console.log('RESPONSE DATA:', response.data); // ✅ Veja o que vem aqui
-  
+
+      console.log('RESPONSE DATA:', response.data);
+
       login(response.data);
       navigate('/backoffice');
     } catch (error) {
       console.error('Erro no login:', error);
-      
+
       if (error.response && error.response.status === 401) {
-        alert('Credenciais inválidas!');
+        AlertUtils.erro('Credenciais inválidas!');
       } else {
-        alert('Erro de conexão com o servidor.');
+        AlertUtils.erro('Erro de conexão com o servidor.');
       }
     } finally {
       setLoading(false);
@@ -41,7 +42,7 @@ const LoginPage = () => {
         <div className="card-body">
           <div className="text-center mb-4">
             <h3 className="fw-bold mb-1"> <span className="text-primary">Backoffice</span> - Login</h3>
-          </div>  
+          </div>
           <form onSubmit={handleLogin}>
             <div className="mb-3">
               <label className="form-label">Email</label>

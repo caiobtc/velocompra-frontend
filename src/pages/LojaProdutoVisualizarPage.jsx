@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import NavbarLoja from '../components/NavbarLoja';
 import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx';
+import AlertUtils from '../utils/alerts';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -40,20 +41,18 @@ const LojaProdutoVisualizarPage = () => {
     }
   };
 
-  // 👉 Função de comprar com redirecionamento ao carrinho:
   const handleComprar = () => {
     if (!produto || produto.quantidadeEstoque <= 0) {
-      alert('Produto fora de estoque.');
+      AlertUtils.aviso('Produto fora de estoque.');
       return;
     }
 
     const adicionado = adicionarAoCarrinho(produto);
 
     if (adicionado) {
-      alert('Produto adicionado ao carrinho com sucesso!');
+      AlertUtils.sucesso('Produto adicionado ao carrinho com sucesso!');
       navigate('/carrinho');
     }
-    // navigate('/loja');
   };
 
   if (!produto) {

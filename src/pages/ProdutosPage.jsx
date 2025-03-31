@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../contexts/AuthContext.jsx';
 import { formatCurrency } from '../utils/formatters.js';
+import AlertUtils from '../utils/alerts';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-
 import BackofficeLayout from '../components/BackofficeLayout';
 
 const ProdutosPage = () => {
@@ -20,7 +20,6 @@ const ProdutosPage = () => {
 
   useEffect(() => {
     buscarProdutos();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paginaAtual]);
 
   const buscarProdutos = async () => {
@@ -37,7 +36,7 @@ const ProdutosPage = () => {
       setTotalPaginas(response.data.totalPages);
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
-      alert('Erro ao buscar produtos. Veja o console.');
+      AlertUtils.erro('Erro ao buscar produtos. Veja o console.');
     }
   };
 
@@ -55,7 +54,7 @@ const ProdutosPage = () => {
   };
 
   const handleHabilitarInabilitar = async (id) => {
-    const confirmacao = window.confirm('Tem certeza que deseja alterar o status deste produto?');
+    const confirmacao = await AlertUtils.confirmar('Tem certeza que deseja alterar o status deste produto?');
     if (!confirmacao) return;
 
     try {
@@ -63,7 +62,7 @@ const ProdutosPage = () => {
       buscarProdutos();
     } catch (error) {
       console.error('Erro ao atualizar status do produto:', error);
-      alert('Erro ao atualizar status do produto.');
+      AlertUtils.erro('Erro ao atualizar status do produto.');
     }
   };
 
@@ -74,6 +73,7 @@ const ProdutosPage = () => {
   const handleProximaPagina = () => {
     if (paginaAtual < totalPaginas - 1) setPaginaAtual(paginaAtual + 1);
   };
+
 
   return (
     <BackofficeLayout>
