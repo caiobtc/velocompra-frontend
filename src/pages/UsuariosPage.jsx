@@ -3,6 +3,7 @@ import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import BackofficeLayout from '../components/BackofficeLayout';
+import AlertUtils from '../utils/alerts';
 
 const UsuariosPage = () => {
   const navigate = useNavigate();
@@ -18,10 +19,10 @@ const UsuariosPage = () => {
       const response = await api.get('/usuarios', {
         params: { nome: filtroNome }
       });
-      console.log('Dados recebidos:', response.data); // Debug: Confirme o campo "ativo"
       setUsuarios(response.data);
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
+      AlertUtils.erro('Erro ao buscar usuários.');
     }
   };
 
@@ -34,7 +35,7 @@ const UsuariosPage = () => {
   };
 
   const handleAtivarInativar = async (id) => {
-    const confirmacao = window.confirm('Tem certeza que deseja alterar o status deste usuário?');
+    const confirmacao = await AlertUtils.confirmar('Tem certeza que deseja alterar o status deste usuário?');
     if (!confirmacao) return;
 
     try {
@@ -42,6 +43,7 @@ const UsuariosPage = () => {
       buscarUsuarios();
     } catch (error) {
       console.error('Erro ao atualizar status:', error);
+      AlertUtils.erro('Erro ao atualizar status do usuário.');
     }
   };
 

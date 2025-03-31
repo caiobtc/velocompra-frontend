@@ -2,6 +2,7 @@ import { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import BackofficeLayout from '../components/BackofficeLayout';
+import AlertUtils from '../utils/alerts';
 
 const ProdutosCadastrarPage = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const ProdutosCadastrarPage = () => {
     e.preventDefault();
 
     if (imagens.length === 0) {
-      alert('Selecione pelo menos uma imagem para o produto!');
+      AlertUtils.aviso('Selecione pelo menos uma imagem para o produto!');
       return;
     }
 
@@ -50,11 +51,11 @@ const ProdutosCadastrarPage = () => {
         localStorage.setItem(`avaliacao_produto_${produtoId}`, avaliacao);
       }
 
-      alert('Produto cadastrado com sucesso!');
+      AlertUtils.sucesso('Produto cadastrado com sucesso!');
       navigate('/produtos');
     } catch (error) {
       console.error('Erro ao cadastrar produto:', error);
-      alert('Erro ao cadastrar produto.');
+      AlertUtils.erro('Erro ao cadastrar produto.');
     }
   };
 
@@ -169,51 +170,49 @@ const ProdutosCadastrarPage = () => {
               />
 
               {previews.length > 0 && (
-                <>
-                  <div className="d-flex gap-3 flex-wrap">
-                    {previews.map((preview, index) => (
-                      <div
-                        key={index}
-                        className={`border p-1 position-relative ${imagemPadraoIndex === index ? 'border-primary' : ''}`}
+                <div className="d-flex gap-3 flex-wrap mt-2">
+                  {previews.map((preview, index) => (
+                    <div
+                      key={index}
+                      className={`border p-1 position-relative ${imagemPadraoIndex === index ? 'border-primary' : ''}`}
+                      style={{
+                        width: '120px',
+                        height: '120px',
+                        cursor: 'pointer',
+                        borderWidth: imagemPadraoIndex === index ? '3px' : '1px',
+                        borderRadius: '10px',
+                      }}
+                    >
+                      <img
+                        src={preview}
+                        alt={`Imagem ${index + 1}`}
                         style={{
-                          width: '120px',
-                          height: '120px',
-                          cursor: 'pointer',
-                          borderWidth: imagemPadraoIndex === index ? '3px' : '1px',
-                          borderRadius: '10px',
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '8px',
                         }}
+                        onClick={() => setImagemPadraoIndex(index)}
+                      />
+
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-danger position-absolute top-0 end-0"
+                        onClick={() => removerImagem(index)}
                       >
-                        <img
-                          src={preview}
-                          alt={`Imagem ${index + 1}`}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            borderRadius: '8px',
-                          }}
-                          onClick={() => setImagemPadraoIndex(index)}
-                        />
+                        ×
+                      </button>
 
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-danger position-absolute top-0 end-0"
-                          onClick={() => removerImagem(index)}
-                        >
-                          ×
-                        </button>
-
-                        <div className="text-center">
-                          {imagemPadraoIndex === index ? (
-                            <small className="mt-1 text-primary fw-semibold">Imagem Padrão</small>
-                          ) : (
-                            <small className="text-muted">Clique p/ Padrão</small>
-                          )}
-                        </div>
+                      <div className="text-center">
+                        {imagemPadraoIndex === index ? (
+                          <small className="mt-1 text-primary fw-semibold">Imagem Padrão</small>
+                        ) : (
+                          <small className="text-muted">Clique p/ Padrão</small>
+                        )}
                       </div>
-                    ))}
-                  </div>
-                </>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
 

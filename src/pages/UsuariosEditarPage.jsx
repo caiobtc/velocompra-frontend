@@ -3,10 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import api from '../services/api';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import BackofficeLayout from '../components/BackofficeLayout';
+import AlertUtils from '../utils/alerts';
 
 const UsuariosEditarPage = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // Pegamos o ID do usuário pela URL
+  const { id } = useParams();
 
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
@@ -15,23 +16,21 @@ const UsuariosEditarPage = () => {
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
   useEffect(() => {
-
     const carregarUsuario = async () => {
       try {
         const response = await api.get(`/usuarios/${id}`);
         const usuario = response.data;
-  
+
         setNome(usuario.nome);
         setCpf(usuario.cpf);
         setGrupo(usuario.grupo);
       } catch (error) {
         console.error('Erro ao carregar usuário:', error);
-        alert('Erro ao carregar usuário. Verifique o console.');
+        AlertUtils.erro('Erro ao carregar usuário. Verifique o console.');
       }
     };
 
     carregarUsuario();
-
   }, [id]);
 
   const validarCPF = (cpf) => {
@@ -54,39 +53,31 @@ const UsuariosEditarPage = () => {
     e.preventDefault();
 
     if (!nome.trim() || !cpf.trim()) {
-      alert('Nome e CPF são obrigatórios!');
+      AlertUtils.aviso('Nome e CPF são obrigatórios!');
       return;
     }
 
     if (!validarCPF(cpf)) {
-      alert('CPF inválido!');
+      AlertUtils.aviso('CPF inválido!');
       return;
     }
 
     if (senha && senha !== confirmarSenha) {
-      alert('As senhas não coincidem!');
+      AlertUtils.aviso('As senhas não coincidem!');
       return;
     }
 
     try {
-      const payload = {
-        nome,
-        cpf,
-        grupo,
-      };
-
-      // Se tiver senha preenchida, inclui no payload
-      if (senha) {
-        payload.senha = senha;
-      }
+      const payload = { nome, cpf, grupo };
+      if (senha) payload.senha = senha;
 
       await api.put(`/usuarios/${id}`, payload);
 
-      alert('Usuário atualizado com sucesso!');
+      AlertUtils.sucesso('Usuário atualizado com sucesso!');
       navigate('/usuarios');
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
-      alert('Erro ao atualizar usuário. Verifique o console.');
+      AlertUtils.erro('Erro ao atualizar usuário. Verifique o console.');
     }
   };
 

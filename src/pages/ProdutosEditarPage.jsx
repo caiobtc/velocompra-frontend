@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { AuthContext } from '../contexts/AuthContext.jsx';
 import BackofficeLayout from '../components/BackofficeLayout';
+import AlertUtils from '../utils/alerts';
 
 const ProdutosEditarPage = () => {
   const { id } = useParams();
@@ -38,14 +39,13 @@ const ProdutosEditarPage = () => {
       setImagensExistentes(produto.imagens || []);
       setImagemPadraoExistente(produto.imagemPadrao || '');
 
-      // Pega a avaliação do LocalStorage
       const avaliacaoSalva = localStorage.getItem(`avaliacao_produto_${id}`);
       setAvaliacao(parseFloat(avaliacaoSalva) || 0);
 
       setImagemPadraoIndex(0);
     } catch (error) {
       console.error('Erro ao carregar produto:', error);
-      alert('Erro ao carregar produto.');
+      AlertUtils.erro('Erro ao carregar produto.');
     }
   };
 
@@ -64,7 +64,7 @@ const ProdutosEditarPage = () => {
           params: { quantidadeEstoque },
         });
 
-        alert('Estoque atualizado com sucesso!');
+        AlertUtils.sucesso('Estoque atualizado com sucesso!');
         navigate('/produtos');
         return;
       }
@@ -91,14 +91,13 @@ const ProdutosEditarPage = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      // Atualiza a avaliação no LocalStorage
       localStorage.setItem(`avaliacao_produto_${id}`, avaliacao);
 
-      alert('Produto atualizado com sucesso!');
+      AlertUtils.sucesso('Produto atualizado com sucesso!');
       navigate('/produtos');
     } catch (error) {
       console.error('Erro ao atualizar produto:', error);
-      alert('Erro ao atualizar produto.');
+      AlertUtils.erro('Erro ao atualizar produto.');
     }
   };
 

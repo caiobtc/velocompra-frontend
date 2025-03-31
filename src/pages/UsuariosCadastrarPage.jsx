@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import BackofficeLayout from '../components/BackofficeLayout.jsx';
+import AlertUtils from '../utils/alerts';
 
 const UsuariosCadastrarPage = () => {
   const navigate = useNavigate();
@@ -15,7 +16,6 @@ const UsuariosCadastrarPage = () => {
   const [grupo, setGrupo] = useState('ESTOQUISTA');
   const [loading, setLoading] = useState(false);
 
-  // Função para validar CPF simples (pode ser melhorada se quiser)
   const validarCPF = (cpf) => {
     return /^\d{11}$/.test(cpf.replace(/[^\d]/g, ''));
   };
@@ -24,12 +24,12 @@ const UsuariosCadastrarPage = () => {
     e.preventDefault();
 
     if (!validarCPF(cpf)) {
-      alert('CPF inválido. Deve conter 11 dígitos.');
+      AlertUtils.aviso('CPF inválido. Deve conter 11 dígitos.');
       return;
     }
 
     if (senha !== confirmarSenha) {
-      alert('As senhas não conferem!');
+      AlertUtils.aviso('As senhas não conferem!');
       return;
     }
 
@@ -45,11 +45,11 @@ const UsuariosCadastrarPage = () => {
 
     try {
       await api.post('/usuarios', novoUsuario);
-      alert('Usuário cadastrado com sucesso!');
+      AlertUtils.sucesso('Usuário cadastrado com sucesso!');
       navigate('/usuarios');
     } catch (error) {
       console.error('Erro ao cadastrar usuário:', error);
-      alert(error?.response?.data || 'Erro ao cadastrar usuário!');
+      AlertUtils.erro(error?.response?.data || 'Erro ao cadastrar usuário!');
     } finally {
       setLoading(false);
     }
