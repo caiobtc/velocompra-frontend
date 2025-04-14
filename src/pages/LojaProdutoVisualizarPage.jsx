@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api from '../services/api.js';
 import NavbarLoja from '../components/NavbarLoja';
 import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx';
-import AlertUtils from '../utils/alerts';
+import AlertUtils from '../utils/alerts.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 

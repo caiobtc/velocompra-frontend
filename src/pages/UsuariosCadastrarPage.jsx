@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import BackofficeLayout from '../components/BackofficeLayout.jsx';
-import AlertUtils from '../utils/alerts';
+import AlertUtils from '../utils/alerts.js';
 
 const UsuariosCadastrarPage = () => {
   const navigate = useNavigate();

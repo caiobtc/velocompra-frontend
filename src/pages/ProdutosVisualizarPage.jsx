@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api';
-import BackofficeLayout from '../components/BackofficeLayout';
+import api from '../services/api.js';
+import BackofficeLayout from '../components/BackofficeLayout.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 

@@ -1,8 +1,8 @@
 import { useState, useContext } from 'react';
-import api from '../services/api';
-import { AuthContext } from '../contexts/AuthContext';
+import api from '../services/api.js';
+import { AuthContext } from '../contexts/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
-import AlertUtils from '../utils/alerts';
+import AlertUtils from '../utils/alerts.js';
 
 const LoginPage = () => {
   const { login } = useContext(AuthContext);

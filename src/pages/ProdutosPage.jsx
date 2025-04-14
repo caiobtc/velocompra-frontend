@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api from '../services/api.js';
 import { AuthContext } from '../contexts/AuthContext.jsx';
 import { formatCurrency } from '../utils/formatters.js';
-import AlertUtils from '../utils/alerts';
+import AlertUtils from '../utils/alerts.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import BackofficeLayout from '../components/BackofficeLayout';
+import BackofficeLayout from '../components/BackofficeLayout.jsx';
 
 const ProdutosPage = () => {
   const navigate = useNavigate();

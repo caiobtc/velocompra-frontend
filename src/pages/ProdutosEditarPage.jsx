@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api';
+import api from '../services/api.js';
 import { AuthContext } from '../contexts/AuthContext.jsx';
-import BackofficeLayout from '../components/BackofficeLayout';
-import AlertUtils from '../utils/alerts';
+import BackofficeLayout from '../components/BackofficeLayout.jsx';
+import AlertUtils from '../utils/alerts.js';
 
 const ProdutosEditarPage = () => {
   const { id } = useParams();

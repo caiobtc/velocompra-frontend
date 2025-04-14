@@ -15,6 +15,7 @@ import LojaHomePage from './pages/LojaHomePage.jsx';
 import LojaProdutoVisualizarPage from './pages/LojaProdutoVisualizarPage.jsx';
 import LojaCarrinhoPage from './pages/LojaCarrinhoPage.jsx';
 import AppLayout from './components/AppLayout.jsx'; 
+import ClienteCadastroPage from './pages/ClienteCadastroPage.jsx';
 
 function App() {
   return (
@@ -26,20 +27,21 @@ function App() {
         <Route path="*" element={<LoginPage />} />
 
         {/* Rotas da Loja com Footer */}
+        <Route path="/cadastro" element={<AppLayout><ClienteCadastroPage /></AppLayout>} />
         <Route path="/" element={<AppLayout><LojaHomePage /></AppLayout>} />
         <Route path="/loja" element={<AppLayout><LojaHomePage /></AppLayout>} />
         <Route path="/loja/produtos/:id" element={<AppLayout><LojaProdutoVisualizarPage /></AppLayout>} />
         <Route path="/carrinho" element={<AppLayout><LojaCarrinhoPage /></AppLayout>} />
 
         {/* Backoffice com Footer */}
-        <Route path="/backoffice" element={<PrivateRoute><AppLayout><BackofficePage /></AppLayout></PrivateRoute>} />
-        <Route path="/produtos" element={<PrivateRoute><AppLayout><ProdutosPage /></AppLayout></PrivateRoute>} />
-        <Route path="/produtos/cadastrar" element={<AdminRoute><AppLayout><ProdutosCadastrarPage /></AppLayout></AdminRoute>} />
-        <Route path="/produtos/editar/:id" element={<PrivateRoute><AppLayout><ProdutosEditarPage /></AppLayout></PrivateRoute>} />
-        <Route path="/produtos/visualizar/:id" element={<AdminRoute><AppLayout><ProdutosVisualizarPage /></AppLayout></AdminRoute>} />
-        <Route path="/usuarios" element={<AdminRoute><AppLayout><UsuariosPage /></AppLayout></AdminRoute>} />
-        <Route path="/usuarios/cadastrar" element={<AdminRoute><AppLayout><UsuariosCadastrarPage /></AppLayout></AdminRoute>} />
-        <Route path="/usuarios/editar/:id" element={<AdminRoute><AppLayout><UsuariosEditarPage /></AppLayout></AdminRoute>} />
+        <Route path="/backoffice" element={<PrivateRoute><BackofficePage /></PrivateRoute>} />
+        <Route path="/produtos" element={<PrivateRoute><ProdutosPage /></PrivateRoute>} />
+        <Route path="/produtos/cadastrar" element={<AdminRoute><ProdutosCadastrarPage /></AdminRoute>} />
+        <Route path="/produtos/editar/:id" element={<PrivateRoute><ProdutosEditarPage /></PrivateRoute>} />
+        <Route path="/produtos/visualizar/:id" element={<AdminRoute><ProdutosVisualizarPage /></AdminRoute>} />
+        <Route path="/usuarios" element={<AdminRoute><UsuariosPage /></AdminRoute>} />
+        <Route path="/usuarios/cadastrar" element={<AdminRoute><UsuariosCadastrarPage /></AdminRoute>} />
+        <Route path="/usuarios/editar/:id" element={<AdminRoute><UsuariosEditarPage /></AdminRoute>} />
 
 
         {/* Rotas do Backoffice */}

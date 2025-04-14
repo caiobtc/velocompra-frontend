@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import api from '../services/api';
+import api from '../services/api.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import BackofficeLayout from '../components/BackofficeLayout';
-import AlertUtils from '../utils/alerts';
+import AlertUtils from '../utils/alerts.js';
 
 const UsuariosEditarPage = () => {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import AlertUtils from '../utils/alerts';
+import AlertUtils from '../utils/alerts.js';
 
 export const CarrinhoContext = createContext();
 

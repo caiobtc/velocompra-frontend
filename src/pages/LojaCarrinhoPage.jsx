@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx';
 import NavbarLoja from '../components/NavbarLoja.jsx';
 import { useNavigate } from 'react-router-dom';
-import AlertUtils from '../utils/alerts';
+import AlertUtils from '../utils/alerts.js';
 
 const LojaCarrinhoPage = () => {
   const { carrinho, adicionarAoCarrinho, removerDoCarrinho, limparCarrinho } = useContext(CarrinhoContext);

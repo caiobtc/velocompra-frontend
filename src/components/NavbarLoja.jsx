@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { CarrinhoContext } from '../contexts/CarrinhoContext'; // Certifique-se que está no caminho correto!
+import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx'; // Certifique-se que está no caminho correto!
 
 const NavbarLoja = () => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const NavbarLoja = () => {
           </button>
 
           {/* Botão de login/criar conta */}
-          <Link to="/login" className="btn btn-primary">
+          <Link to="/cadastro" className="btn btn-primary">
             Login / Criar Conta
           </Link>
         </div>

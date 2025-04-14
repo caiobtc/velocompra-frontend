@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import api from '../services/api';
+import api from '../services/api.js';
 import { useNavigate } from 'react-router-dom';
-import BackofficeLayout from '../components/BackofficeLayout';
-import AlertUtils from '../utils/alerts';
+import BackofficeLayout from '../components/BackofficeLayout.jsx';
+import AlertUtils from '../utils/alerts.js';
 
 const ProdutosCadastrarPage = () => {
   const navigate = useNavigate();
