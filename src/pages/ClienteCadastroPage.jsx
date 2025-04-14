@@ -136,7 +136,7 @@ const ClienteCadastroPage = () => {
               <span
                 className="text-primary fw-bold"
                 style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/cliente/login')}
               >
                 ENTRAR
               </span>
