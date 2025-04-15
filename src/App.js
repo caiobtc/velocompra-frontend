@@ -14,26 +14,33 @@ import ProdutosVisualizarPage from './pages/ProdutosVisualizarPage.jsx';
 import LojaHomePage from './pages/LojaHomePage.jsx';
 import LojaProdutoVisualizarPage from './pages/LojaProdutoVisualizarPage.jsx';
 import LojaCarrinhoPage from './pages/LojaCarrinhoPage.jsx';
-import AppLayout from './components/AppLayout.jsx'; 
+import AppLayout from './components/AppLayout.jsx';
 import ClienteCadastroPage from './pages/ClienteCadastroPage.jsx';
+import ClienteLoginPage from './pages/ClienteLoginPage.jsx';
+import ClienteEditarPage from './pages/ClienteEditarPage.jsx';
+import ClienteEnderecosPage from './pages/ClienteEnderecosPage.jsx';
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
 
-        {/* Login e Fallback (sem Footer) */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<LoginPage />} />
+        {/* Login Backoffice separado */}
+        <Route path="/login-back" element={<LoginPage />} />
 
         {/* Rotas da Loja com Footer */}
-        <Route path="/cadastro" element={<AppLayout><ClienteCadastroPage /></AppLayout>} />
         <Route path="/" element={<AppLayout><LojaHomePage /></AppLayout>} />
         <Route path="/loja" element={<AppLayout><LojaHomePage /></AppLayout>} />
         <Route path="/loja/produtos/:id" element={<AppLayout><LojaProdutoVisualizarPage /></AppLayout>} />
         <Route path="/carrinho" element={<AppLayout><LojaCarrinhoPage /></AppLayout>} />
+        <Route path="/cadastro" element={<AppLayout><ClienteCadastroPage /></AppLayout>} />
 
-        {/* Backoffice com Footer */}
+        {/* Rotas Cliente */}
+        <Route path="/cliente/login" element={<ClienteLoginPage />} />
+        <Route path="/cliente/editar" element={<AppLayout><ClienteEditarPage /></AppLayout>} />
+        <Route path="/cliente/enderecos" element={<AppLayout><ClienteEnderecosPage /></AppLayout>} />
+
+        {/* Backoffice */}
         <Route path="/backoffice" element={<PrivateRoute><BackofficePage /></PrivateRoute>} />
         <Route path="/produtos" element={<PrivateRoute><ProdutosPage /></PrivateRoute>} />
         <Route path="/produtos/cadastrar" element={<AdminRoute><ProdutosCadastrarPage /></AdminRoute>} />
@@ -43,17 +50,8 @@ function App() {
         <Route path="/usuarios/cadastrar" element={<AdminRoute><UsuariosCadastrarPage /></AdminRoute>} />
         <Route path="/usuarios/editar/:id" element={<AdminRoute><UsuariosEditarPage /></AdminRoute>} />
 
-
-        {/* Rotas do Backoffice */}
-        {/* <Route path="/produtos" element={<ProdutosPage />} /> */}
-
-        {/* <Route path="/" element={<LojaHomePage />} />
-        <Route path="/produtos/:id" element={<ProdutosVisualizarPage />} />
-
-        <Route path="/" element={<LojaHomePage />} />       */}
-
-        <Route path="*" element={<LoginPage />} />
-
+        {/* Rota fallback para a loja */}
+        <Route path="*" element={<AppLayout><LojaHomePage /></AppLayout>} />
       </Routes>
     </AuthProvider>
   );

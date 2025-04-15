@@ -7,11 +7,16 @@ const api = axios.create({
   },
 });
 
-// Intercepta cada request e adiciona o token, se existir
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
 
-  if (token) {
+  // Verifica se a URL é pública e evita enviar o token
+  const publicRoutes = ['/clientes/cadastrar', '/auth/login', '/cliente/login'];
+
+
+  const isPublic = publicRoutes.some(route => config.url.includes(route));
+
+  if (token && !isPublic) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
