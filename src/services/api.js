@@ -11,7 +11,7 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
 
   // Verifica se a URL é pública e evita enviar o token
-  const publicRoutes = ['/clientes/cadastrar', '/auth/login', '/cliente/login'];
+  const publicRoutes = ['/clientes/cadastrar', '/auth/login', '/cliente/login', '/viacep/'];
 
 
   const isPublic = publicRoutes.some(route => config.url.includes(route));

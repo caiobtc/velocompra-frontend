@@ -18,7 +18,6 @@ import AppLayout from './components/AppLayout.jsx';
 import ClienteCadastroPage from './pages/ClienteCadastroPage.jsx';
 import ClienteLoginPage from './pages/ClienteLoginPage.jsx';
 import ClienteEditarPage from './pages/ClienteEditarPage.jsx';
-import ClienteEnderecosPage from './pages/ClienteEnderecosPage.jsx';
 
 function App() {
   return (
@@ -36,9 +35,8 @@ function App() {
         <Route path="/cadastro" element={<AppLayout><ClienteCadastroPage /></AppLayout>} />
 
         {/* Rotas Cliente */}
-        <Route path="/cliente/login" element={<ClienteLoginPage />} />
+        <Route path="/cliente/login" element={<AppLayout><ClienteLoginPage /></AppLayout>} />
         <Route path="/cliente/editar" element={<AppLayout><ClienteEditarPage /></AppLayout>} />
-        <Route path="/cliente/enderecos" element={<AppLayout><ClienteEnderecosPage /></AppLayout>} />
 
         {/* Backoffice */}
         <Route path="/backoffice" element={<PrivateRoute><BackofficePage /></PrivateRoute>} />

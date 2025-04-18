@@ -18,6 +18,10 @@ const ClienteCadastroPage = () => {
     cep: '',
     numero: '',
     complemento: '',
+    logradouro: '',
+    bairro: '',
+    cidade: '',
+    uf: ''
   });
 
   const [loading, setLoading] = useState(false);
@@ -27,16 +31,43 @@ const ClienteCadastroPage = () => {
     setForm({ ...form, [name]: value });
   };
 
+  const buscarCep = async () => {
+    try {
+      const cepLimpo = form.cep.replace(/\D/g, '');
+      const { data } = await api.get(`/viacep/${cepLimpo}`);
+      setForm(prev => ({
+        ...prev,
+        logradouro: data.logradouro || '',
+        bairro: data.bairro || '',
+        cidade: data.cidade || '',
+        uf: data.uf || ''
+      }));
+    } catch {
+      AlertUtils.erro('CEP inválido ou não encontrado.');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (form.senha !== form.confirmarSenha) {
       AlertUtils.aviso('As senhas não conferem!');
       return;
     }
-
+  
     setLoading(true);
     try {
+      const enderecoCompleto = {
+        cep: form.cep,
+        numero: form.numero,
+        complemento: form.complemento,
+        logradouro: form.logradouro,
+        bairro: form.bairro,
+        cidade: form.cidade,
+        uf: form.uf,
+        padrao: true
+      };
+  
       const payload = {
         nome: form.nome,
         cpf: form.cpf,
@@ -45,14 +76,10 @@ const ClienteCadastroPage = () => {
         confirmarSenha: form.confirmarSenha,
         genero: form.genero,
         dataNascimento: form.dataNascimento,
-        enderecoFaturamento: {
-          cep: form.cep,
-          numero: form.numero,
-          complemento: form.complemento
-        },
-        enderecosEntrega: []
+        enderecoFaturamento: { ...enderecoCompleto },
+        enderecosEntrega: [enderecoCompleto] // ✅ inclui o mesmo endereço como entrega
       };
-
+  
       await api.post('/clientes/cadastrar', payload);
       AlertUtils.sucesso('Cadastro realizado com sucesso!');
       navigate('/login');
@@ -103,7 +130,25 @@ const ClienteCadastroPage = () => {
             </div>
             <div className="col-md-6">
               <label>CEP*</label>
-              <input type="text" className="form-control" name="cep" value={form.cep} onChange={handleChange} required />
+              <input type="text" className="form-control" name="cep" value={form.cep} onChange={handleChange} onBlur={buscarCep} required />
+            </div>
+
+            <div className="col-md-6">
+              <label>Logradouro</label>
+              <input type="text" className="form-control" name="logradouro" value={form.logradouro} readOnly />
+            </div>
+            <div className="col-md-6">
+              <label>Bairro</label>
+              <input type="text" className="form-control" name="bairro" value={form.bairro} readOnly />
+            </div>
+
+            <div className="col-md-6">
+              <label>Cidade</label>
+              <input type="text" className="form-control" name="cidade" value={form.cidade} readOnly />
+            </div>
+            <div className="col-md-6">
+              <label>UF</label>
+              <input type="text" className="form-control" name="uf" value={form.uf} readOnly />
             </div>
 
             <div className="col-md-6">
@@ -133,13 +178,13 @@ const ClienteCadastroPage = () => {
 
           <div className="text-center mt-3">
             <small>Já possui cadastro?{' '}
-              <span
+              <button
                 className="text-primary fw-bold"
                 style={{ cursor: 'pointer' }}
                 onClick={() => navigate('/cliente/login')}
               >
                 ENTRAR
-              </span>
+              </button>
             </small>
           </div>
         </form>

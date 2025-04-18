@@ -41,7 +41,7 @@ const NavbarLoja = () => {
         localStorage.removeItem('carrinho');
         setClienteLogado(null);
         navigate('/');
-        Swal.fire('Deslogado!', 'Sua sessão foi encerrada.', 'success');
+        Swal.fire('Deslogado!', 'Sua sessão foi encerrada.', 'successo');
       }
     });
   };
@@ -77,8 +77,7 @@ const NavbarLoja = () => {
                 Olá, {clienteLogado.split(' ')[0]}
               </button>
               <ul className="dropdown-menu dropdown-menu-end">
-                <li><button className="dropdown-item" onClick={() => navigate('/cliente/editar')}>Editar Dados</button></li>
-                <li><button className="dropdown-item" onClick={() => navigate('/cliente/enderecos')}>Meus Endereços</button></li>
+                <li><button className="dropdown-item" onClick={() => navigate('/cliente/editar')}>Meus Dados</button></li>
                 <li><hr className="dropdown-divider" /></li>
                 <li><button className="dropdown-item text-danger" onClick={handleLogout}>Sair</button></li>
               </ul>

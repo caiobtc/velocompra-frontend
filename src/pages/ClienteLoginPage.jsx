@@ -22,9 +22,7 @@ const ClienteLoginPage = () => {
     setLoading(true);
 
     try {
-      // Alterado para o endpoint exclusivo de login de cliente
       const response = await api.post('/auth/login-cliente', form);
-
       const { token, grupo, nome } = response.data;
 
       if (grupo === 'CLIENTE') {
@@ -49,33 +47,43 @@ const ClienteLoginPage = () => {
       <NavbarLoja />
       <div className="container mt-5">
         <div className="text-center mb-4">
-          <h2 className="fw-bold text-primary">Login do Cliente</h2>
+          <h2 className="fw-bold text-primary">ACESSE SUA CONTA</h2>
         </div>
 
         <div className="card shadow p-4 mx-auto" style={{ maxWidth: 500 }}>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label>Email</label>
-              <input
-                type="email"
-                className="form-control"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                required
-              />
+              <label>E-mail</label>
+              <div className="input-group">
+                <span className="input-group-text">
+                  <i className="bi bi-person-fill"></i>
+                </span>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
             <div className="mb-3">
               <label>Senha</label>
-              <input
-                type="password"
-                className="form-control"
-                name="senha"
-                value={form.senha}
-                onChange={handleChange}
-                required
-              />
+              <div className="input-group">
+                <span className="input-group-text">
+                  <i className="bi bi-lock-fill"></i>
+                </span>
+                <input
+                  type="password"
+                  className="form-control"
+                  name="senha"
+                  value={form.senha}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
             <button
