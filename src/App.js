@@ -18,6 +18,11 @@ import AppLayout from './components/AppLayout.jsx';
 import ClienteCadastroPage from './pages/ClienteCadastroPage.jsx';
 import ClienteLoginPage from './pages/ClienteLoginPage.jsx';
 import ClienteEditarPage from './pages/ClienteEditarPage.jsx';
+import CheckoutPage from './pages/CheckoutPage.jsx'
+import ClientePagamentoPage from './pages/ClientePagamentoPage.jsx';
+import ClienteResumoPedidoPage from './pages/ClienteResumoPedidoPage.jsx';
+import ClienteFinalizarCompraPage from './pages/ClienteFinalizarCompraPage.jsx';
+import ClientePedidosPage from './pages/ClientePedidosPage.jsx';
 
 function App() {
   return (
@@ -33,6 +38,14 @@ function App() {
         <Route path="/loja/produtos/:id" element={<AppLayout><LojaProdutoVisualizarPage /></AppLayout>} />
         <Route path="/carrinho" element={<AppLayout><LojaCarrinhoPage /></AppLayout>} />
         <Route path="/cadastro" element={<AppLayout><ClienteCadastroPage /></AppLayout>} />
+        <Route path="/checkout" element={<AppLayout><CheckoutPage /> </AppLayout>} />
+        <Route path="/pagamento" element={<AppLayout><ClientePagamentoPage /> </AppLayout>} />
+        <Route path="/resumo-pedido" element={<AppLayout><ClienteResumoPedidoPage /> </AppLayout>} />
+        <Route path="/finalizar-compra" element={<AppLayout><ClienteFinalizarCompraPage /> </AppLayout>} />
+        <Route path="/meus-pedidos" element={<AppLayout><ClientePedidosPage /></AppLayout>} />
+       
+        
+
 
         {/* Rotas Cliente */}
         <Route path="/cliente/login" element={<AppLayout><ClienteLoginPage /></AppLayout>} />

@@ -78,6 +78,7 @@ const NavbarLoja = () => {
               </button>
               <ul className="dropdown-menu dropdown-menu-end">
                 <li><button className="dropdown-item" onClick={() => navigate('/cliente/editar')}>Meus Dados</button></li>
+                <li><button className="dropdown-item" onClick={() => navigate('/meus-pedidos')}>Meus Pedidos</button></li>
                 <li><hr className="dropdown-divider" /></li>
                 <li><button className="dropdown-item text-danger" onClick={handleLogout}>Sair</button></li>
               </ul>

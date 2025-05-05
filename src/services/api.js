@@ -11,13 +11,14 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
 
   // Verifica se a URL é pública e evita enviar o token
-  const publicRoutes = ['/clientes/cadastrar', '/auth/login', '/cliente/login', '/viacep/'];
+  const publicRoutes = ['/clientes/cadastrar', '/auth/login', '/cliente/login', '/viacep/', '/checkout'];
 
 
   const isPublic = publicRoutes.some(route => config.url.includes(route));
 
   if (token && !isPublic) {
     config.headers.Authorization = `Bearer ${token}`;
+    console.log("Token no cabeçalho:", config.headers.Authorization);
   }
 
   return config;

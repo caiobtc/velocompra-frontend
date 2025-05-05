@@ -61,7 +61,16 @@ const LojaCarrinhoPage = () => {
   };
 
   const finalizarCompra = () => {
-    AlertUtils.sucesso('Compra finalizada com sucesso!');
+    const token = localStorage.getItem('token');
+    if (!token) {
+      AlertUtils.aviso('Você precisa estar logado para finalizar a compra.');
+      navigate('/cliente/login');
+      return;
+    }
+
+    navigate('/checkout');
+    //AlertUtils.sucesso('Redirecionando para a tela de checkout...');
+
   };
 
   return (
@@ -230,9 +239,9 @@ const LojaCarrinhoPage = () => {
                 <button
                   className="btn btn-success"
                   onClick={finalizarCompra}
-                  disabled={!freteSelecionado}
+                  disabled={!freteSelecionado || carrinho.length === 0}
                 >
-                  <i className="bi bi-bag-check me-2"></i> Finalizar Compra
+                  <i className="bi bi-bag-check me-2"></i> Ir para Checkout
                 </button>
               </div>
             </div>

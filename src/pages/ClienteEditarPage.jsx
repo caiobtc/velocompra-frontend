@@ -45,10 +45,14 @@ const ClienteEditarPage = () => {
           cpf,
           dataNascimento: dataFormatada,
           genero,
-          enderecoFaturamento: {
+          enderecoFaturamento: enderecoFaturamento ? {
             cep: enderecoFaturamento.cep || '',
             numero: enderecoFaturamento.numero || '',
             complemento: enderecoFaturamento.complemento || ''
+          } : {
+            cep: '',
+            numero: '',
+            complemento: ''
           },
           enderecosEntrega: enderecosEntrega || []
         }));
@@ -101,27 +105,24 @@ const ClienteEditarPage = () => {
 
   const salvarEnderecos = async e => {
     e.preventDefault();
-
+  
+    // Validação do novo endereço
+    if (!form.novoEndereco?.cep || form.novoEndereco.cep.length !== 8) {
+      return AlertUtils.erro('CEP inválido ou vazio.');
+    }
+  
     try {
-      const payload = {
-        enderecoFaturamento: form.enderecoFaturamento,
-        enderecosEntrega: [...form.enderecosEntrega]
-      };
-
-      if (form.novoEndereco && form.novoEndereco.cep && form.novoEndereco.numero) {
-        payload.enderecosEntrega.push(form.novoEndereco);
-      }
-
-      await api.put('/clientes/meus-dados', payload);
-      AlertUtils.sucesso('Endereços atualizados com sucesso!');
-
+      // Envia APENAS o novoEndereco (objeto simples)
+      await api.post('/clientes/enderecos-entrega', form.novoEndereco);
+  
+      AlertUtils.sucesso('Endereço cadastrado com sucesso!');
       setForm(prev => ({
         ...prev,
         novoEndereco: null,
-        enderecosEntrega: payload.enderecosEntrega
+        enderecosEntrega: [...prev.enderecosEntrega, form.novoEndereco] // Atualiza a lista local
       }));
     } catch (error) {
-      AlertUtils.erro(error?.response?.data || 'Erro ao atualizar endereços.');
+      AlertUtils.erro(error?.response?.data || 'Erro ao cadastrar endereço.');
     }
   };
 
@@ -153,21 +154,25 @@ const ClienteEditarPage = () => {
   };
 
   const buscarCep = async () => {
-    try {
-      const cepLimpo = form.novoEndereco.cep.replace(/\D/g, '');
-      const { data } = await api.get(`/viacep/${cepLimpo}`);
-      setForm(prev => ({
-        ...prev,
-        novoEndereco: {
-          ...prev.novoEndereco,
-          logradouro: data.logradouro || '',
-          bairro: data.bairro || '',
-          cidade: data.cidade || '',
-          uf: data.uf || ''
-        }
-      }));
-    } catch {
-      AlertUtils.erro('CEP inválido ou não encontrado.');
+    const cepLimpo = form.novoEndereco.cep.replace(/\D/g, '');  // Limpeza do CEP
+    if (cepLimpo.length === 8) {
+      try {
+        const { data } = await api.get(`/viacep/${cepLimpo}`);
+        setForm(prev => ({
+          ...prev,
+          novoEndereco: {
+            ...prev.novoEndereco,
+            logradouro: data.logradouro || '',
+            bairro: data.bairro || '',
+            cidade: data.cidade|| '',  
+            uf: data.uf || ''
+          }
+        }));
+      } catch {
+        AlertUtils.erro('CEP inválido ou não encontrado.');
+      }
+    } else {
+      AlertUtils.erro('CEP inválido, deve conter 8 caracteres.');
     }
   };
 
@@ -254,7 +259,6 @@ const ClienteEditarPage = () => {
                           Tornar padrão
                         </button>
                       )}
-                      
                     </div>
                   </div>
                 </div>
@@ -263,7 +267,7 @@ const ClienteEditarPage = () => {
               {form.novoEndereco && (
                 <div className="mt-4">
                   <h5>Cadastrar Novo Endereço</h5>
-                  <input name="cep" value={form.novoEndereco.cep} onChange={handleNovoEnderecoChange} onBlur={buscarCep} className="form-control mb-2" placeholder="CEP*" />
+                  <input name="cep" value={form.novoEndereco?.cep || ''} onChange={handleNovoEnderecoChange} onBlur={buscarCep} className="form-control mb-2" placeholder="CEP*" />
                   <input name="logradouro" value={form.novoEndereco.logradouro} readOnly className="form-control mb-2" placeholder="Logradouro" />
                   <div className="row">
                     <div className="col-md-6">
