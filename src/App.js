@@ -23,6 +23,8 @@ import ClientePagamentoPage from './pages/ClientePagamentoPage.jsx';
 import ClienteResumoPedidoPage from './pages/ClienteResumoPedidoPage.jsx';
 import ClienteFinalizarCompraPage from './pages/ClienteFinalizarCompraPage.jsx';
 import ClientePedidosPage from './pages/ClientePedidosPage.jsx';
+import ClientePedidoDetalhesPage from './pages/ClientePedidoDetalhesPage.jsx';
+import EstoquePedidosPage from './pages/EstoquePedidosPage.jsx';
 
 function App() {
   return (
@@ -43,8 +45,7 @@ function App() {
         <Route path="/resumo-pedido" element={<AppLayout><ClienteResumoPedidoPage /> </AppLayout>} />
         <Route path="/finalizar-compra" element={<AppLayout><ClienteFinalizarCompraPage /> </AppLayout>} />
         <Route path="/meus-pedidos" element={<AppLayout><ClientePedidosPage /></AppLayout>} />
-       
-        
+        <Route path="/pedidos/:numeroPedido" element={<AppLayout><ClientePedidoDetalhesPage /></AppLayout>} />
 
 
         {/* Rotas Cliente */}
@@ -60,6 +61,7 @@ function App() {
         <Route path="/usuarios" element={<AdminRoute><UsuariosPage /></AdminRoute>} />
         <Route path="/usuarios/cadastrar" element={<AdminRoute><UsuariosCadastrarPage /></AdminRoute>} />
         <Route path="/usuarios/editar/:id" element={<AdminRoute><UsuariosEditarPage /></AdminRoute>} />
+        <Route path="/backoffice/pedidos" element={<PrivateRoute><EstoquePedidosPage /></PrivateRoute>}/>
 
         {/* Rota fallback para a loja */}
         <Route path="*" element={<AppLayout><LojaHomePage /></AppLayout>} />

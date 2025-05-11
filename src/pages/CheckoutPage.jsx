@@ -88,11 +88,7 @@ const CheckoutPage = () => {
       AlertUtils.aviso('Preencha todos os campos antes de continuar.');
       return;
     }
-
-    // Confirma endereço ao finalizar (redundância de segurança)
     handleConfirmarEndereco();
-
-    //AlertUtils.sucesso('Compra finalizada! Redirecionando para pagamento...');
     navigate('/pagamento');
   };
 
@@ -179,12 +175,6 @@ const CheckoutPage = () => {
               Confirmar Endereço Selecionado
             </button>
 
-            <h5 className="fw-bold mt-4">Forma de Pagamento:</h5>
-            <select className="form-select" onChange={handlePagamentoChange} value={pagamento}>
-              <option value="">Selecione...</option>
-              <option value="cartao">Cartão de Crédito</option>
-              <option value="boleto">Boleto Bancário</option>
-            </select>
 
             <div className="d-flex justify-content-between align-items-center mt-4">
               <h4 className="fw-bold">Total:</h4>
@@ -199,7 +189,7 @@ const CheckoutPage = () => {
               <button
                 className="btn btn-success"
                 onClick={finalizarCompra}
-                disabled={!freteSelecionado || !pagamento || !enderecoEntrega}
+                disabled={!freteSelecionado || !enderecoEntrega}
               >
                 <i className="bi bi-bag-check me-2"></i> Ir para pagamento
               </button>

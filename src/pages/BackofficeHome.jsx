@@ -20,6 +20,10 @@ const BackofficePage = () => {
     navigate('/usuarios');
   };
 
+  const handleGerenciarPedidos = () => {
+    navigate('/backoffice/pedidos');
+  };
+
   return (
     <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
       <div className="card shadow-lg border-0 p-5" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px' }}>
@@ -40,6 +44,16 @@ const BackofficePage = () => {
           >
             <i className="bi bi-box-seam"></i> Gerenciar Produtos
           </button>
+
+          {/*Botão para ESTOQUISTA: Gerenciar Pedidos*/}
+          {usuario?.grupo === 'ESTOQUISTA' && (
+            <button
+              className="btn btn-warning btn-lg d-flex justify-content-center align-items-center gap-2"
+              onClick={handleGerenciarPedidos}
+            >
+              <i className="bi bi-truck"></i> Gerenciar Pedidos
+            </button>
+          )}
 
           {/* Apenas para ADMINISTRADOR aparece este botão */}
           {usuario?.grupo === 'ADMINISTRADOR' && (
