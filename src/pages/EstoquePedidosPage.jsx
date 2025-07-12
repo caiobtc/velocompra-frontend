@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../services/api';
-import AlertUtils from '../utils/alerts';
-import BackofficeLayout from '../components/BackofficeLayout.jsx';
+import { useEffect, useState } from 'react'; // Importa hooks para efeitos colaterais e controle de estado
+import { useNavigate } from 'react-router-dom'; // Hook para navegação programática
+import api from '../services/api'; // Importa instância Axios para comunicação com backend
+import AlertUtils from '../utils/alerts'; // Utilitário para exibir alertas visuais
+import BackofficeLayout from '../components/BackofficeLayout.jsx'; // Layout padrão do painel de backoffice
 
 const EstoquePedidosPage = () => {
-  const [pedidos, setPedidos] = useState([]);
-  const navigate = useNavigate();
+  const [pedidos, setPedidos] = useState([]); // Estado para armazenar os pedidos recebidos da API
+  const navigate = useNavigate(); // Hook que permite redirecionar o usuário via código
 
+  // Lista de status possíveis para um pedido
   const statusOptions = [
     'AGUARDANDO_PAGAMENTO',
     'PAGAMENTO_REJEITADO',
@@ -17,29 +18,32 @@ const EstoquePedidosPage = () => {
     'ENTREGUE'
   ];
 
+  // Hook executado ao carregar a página
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token'); // Recupera o token JWT salvo no navegador
     if (!token) {
       AlertUtils.aviso('Você precisa estar logado como estoquista para visualizar os pedidos.');
-      navigate('/admin/login');
+      navigate('/admin/login'); // Redireciona para a tela de login caso não tenha token
       return;
     }
 
+    // Função para buscar os pedidos do backend
     const carregarPedidos = async () => {
       try {
         const response = await api.get('/admin/pedidos', {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` }, // Envia o token no cabeçalho da requisição
         });
-        setPedidos(response.data);
+        setPedidos(response.data); // Armazena os pedidos no estado
       } catch (error) {
         console.error('Erro ao carregar pedidos:', error);
         AlertUtils.erro('Erro ao carregar a lista de pedidos.');
       }
     };
 
-    carregarPedidos();
-  }, [navigate]);
+    carregarPedidos(); // Executa a função de carregamento
+  }, [navigate]); // Executa novamente apenas se a função navigate mudar
 
+  // Atualiza o status localmente antes de salvar no backend
   const handleStatusChange = (numeroPedido, novoStatus) => {
     setPedidos(prev =>
       prev.map(p =>
@@ -48,10 +52,11 @@ const EstoquePedidosPage = () => {
     );
   };
 
+  // Envia o novo status para o backend via PATCH
   const salvarStatus = async (numeroPedido, status) => {
     try {
       await api.patch(`/admin/pedidos/${numeroPedido}/status`, {
-        novoStatusPedido: status
+        novoStatusPedido: status // Corpo da requisição
       });
       AlertUtils.sucesso('Status atualizado com sucesso!');
     } catch (error) {
@@ -63,8 +68,9 @@ const EstoquePedidosPage = () => {
   return (
     <BackofficeLayout>
       <div className="container py-5">
-        <h2 className="fw-bold text-center mb-4">📦 Pedidos - Estoque</h2>
+        <h2 className="fw-bold text-center mb-4">\ud83d\udce6 Pedidos - Estoque</h2>
 
+        {/* Verifica se há pedidos retornados */}
         {pedidos.length === 0 ? (
           <p className="text-muted text-center">Nenhum pedido encontrado.</p>
         ) : (
@@ -80,6 +86,7 @@ const EstoquePedidosPage = () => {
                 </tr>
               </thead>
               <tbody>
+                {/* Mapeia cada pedido para exibir na tabela */}
                 {pedidos.map((pedido) => (
                   <tr key={pedido.numeroPedido}>
                     <td>{new Date(pedido.dataCriacao).toLocaleDateString('pt-BR')}</td>
@@ -91,11 +98,13 @@ const EstoquePedidosPage = () => {
                       })}
                     </td>
                     <td>
+                      {/* Seletor de status do pedido */}
                       <select
                         className="form-select"
                         value={pedido.status}
                         onChange={(e) => handleStatusChange(pedido.numeroPedido, e.target.value)}
                       >
+                        {/* Opções de status */}
                         {statusOptions.map((status) => (
                           <option key={status} value={status}>
                             {status.replaceAll('_', ' ')}
@@ -122,4 +131,4 @@ const EstoquePedidosPage = () => {
   );
 };
 
-export default EstoquePedidosPage;
+export default EstoquePedidosPage; // Exporta o componente para uso nas rotas

@@ -1,47 +1,53 @@
-import { useContext, useState } from 'react';
-import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx';
-import NavbarLoja from '../components/NavbarLoja.jsx';
-import { useNavigate } from 'react-router-dom';
-import AlertUtils from '../utils/alerts.js';
+import { useContext, useState } from 'react'; // Importa hooks do React
+import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx'; // Importa o contexto do carrinho
+import NavbarLoja from '../components/NavbarLoja.jsx'; // Importa a navbar da loja
+import { useNavigate } from 'react-router-dom'; // Hook para navegação
+import AlertUtils from '../utils/alerts.js'; // Utilitário de alertas
 
 const LojaCarrinhoPage = () => {
+  // Extrai funções e dados do contexto do carrinho
   const { carrinho, adicionarAoCarrinho, removerDoCarrinho, limparCarrinho } = useContext(CarrinhoContext);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Navegação entre páginas
 
+  // Estados locais para CEP, frete e status
   const [cep, setCep] = useState('');
   const [freteSelecionado, setFreteSelecionado] = useState(null);
   const [valorFrete, setValorFrete] = useState(0);
   const [freteCalculado, setFreteCalculado] = useState(false);
 
+  // Soma todos os produtos do carrinho (preço x quantidade)
   const calcularSubtotal = () => {
     return carrinho.reduce((total, item) => total + item.preco * item.quantidade, 0);
   };
 
+  // Soma subtotal + valor do frete
   const calcularTotal = () => {
     return calcularSubtotal() + valorFrete;
   };
 
+  // Diminui a quantidade de um item no carrinho
   const diminuirQuantidade = (produto) => {
     if (produto.quantidade <= 1) {
-      removerDoCarrinho(produto.id);
+      removerDoCarrinho(produto.id); // Remove o item por completo
     } else {
       const produtoComNovaQuantidade = { ...produto, quantidade: produto.quantidade - 1 };
       removerDoCarrinho(produto.id);
       for (let i = 0; i < produtoComNovaQuantidade.quantidade; i++) {
-        adicionarAoCarrinho(produto);
+        adicionarAoCarrinho(produto); // Reinsere com nova quantidade
       }
     }
   };
 
+  // Simula cálculo de frete (exemplo simplificado)
   const handleCalcularFrete = () => {
     if (!cep || cep.length < 8) {
       AlertUtils.aviso('Por favor, informe um CEP válido.');
       return;
     }
-
     setFreteCalculado(true);
   };
 
+  // Define o tipo de frete e valor correspondente
   const handleSelecionarFrete = (tipoFrete) => {
     setFreteSelecionado(tipoFrete);
 
@@ -60,6 +66,7 @@ const LojaCarrinhoPage = () => {
     }
   };
 
+  // Valida se o usuário está logado antes de ir para o checkout
   const finalizarCompra = () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -68,9 +75,7 @@ const LojaCarrinhoPage = () => {
       return;
     }
 
-    navigate('/checkout');
-    //AlertUtils.sucesso('Redirecionando para a tela de checkout...');
-
+    navigate('/checkout'); // Redireciona para tela de finalização
   };
 
   return (
@@ -88,12 +93,14 @@ const LojaCarrinhoPage = () => {
           </div>
         ) : (
           <>
+            {/* Botão de limpar o carrinho */}
             <div className="d-flex justify-content-end mb-3">
               <button className="btn btn-outline-danger" onClick={limparCarrinho}>
                 <i className="bi bi-trash me-2"></i> REMOVER TODOS OS PRODUTOS
               </button>
             </div>
 
+            {/* Lista de itens no carrinho */}
             {carrinho.map((item) => (
               <div key={item.id} className="card mb-4 shadow-sm">
                 <div className="row g-0 align-items-center">
@@ -120,6 +127,7 @@ const LojaCarrinhoPage = () => {
 
                   <div className="col-md-4 text-center">
                     <div className="d-flex flex-column align-items-center gap-2">
+                      {/* Botões de ajuste de quantidade */}
                       <div className="d-flex align-items-center gap-3">
                         <button
                           className="btn btn-outline-warning btn-sm"
@@ -138,6 +146,7 @@ const LojaCarrinhoPage = () => {
                         </button>
                       </div>
 
+                      {/* Botão de remover item */}
                       <button
                         className="btn btn-outline-danger btn-sm mt-2"
                         onClick={() => removerDoCarrinho(item.id)}
@@ -150,7 +159,7 @@ const LojaCarrinhoPage = () => {
               </div>
             ))}
 
-            {/* Área de cálculo de frete */}
+            {/* Área de cálculo e seleção de frete */}
             <div className="card p-4 shadow-sm mb-4">
               <h5 className="fw-bold mb-3">
                 <i className="bi bi-truck me-2 text-primary"></i> Calcular Frete
@@ -171,6 +180,7 @@ const LojaCarrinhoPage = () => {
                 </button>
               </div>
 
+              {/* Opções de frete após cálculo */}
               {freteCalculado && (
                 <div className="mt-4">
                   <h6 className="fw-bold mb-2">Escolha uma opção de frete:</h6>
@@ -220,6 +230,7 @@ const LojaCarrinhoPage = () => {
               )}
             </div>
 
+            {/* Total e botões finais */}
             <div className="d-flex justify-content-between align-items-center mt-5 flex-wrap gap-3">
               <h4 className="fw-bold">
                 Total: {calcularTotal().toLocaleString('pt-BR', {
@@ -252,4 +263,4 @@ const LojaCarrinhoPage = () => {
   );
 };
 
-export default LojaCarrinhoPage;
+export default LojaCarrinhoPage; // Exporta o componente

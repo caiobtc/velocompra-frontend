@@ -7,7 +7,7 @@ const NavbarBackoffice = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
+    //logout();
     navigate('/login');
   };
 

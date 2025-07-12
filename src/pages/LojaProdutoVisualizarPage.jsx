@@ -1,35 +1,48 @@
-import { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/api.js';
-import NavbarLoja from '../components/NavbarLoja';
-import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx';
-import AlertUtils from '../utils/alerts.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+// Importações de hooks e bibliotecas necessárias
+import { useEffect, useState, useContext } from 'react'; // Hooks do React
+import { useParams, useNavigate } from 'react-router-dom'; // Hooks de navegação e parâmetros da URL
+import api from '../services/api.js'; // Importa o serviço de API (axios configurado)
+import NavbarLoja from '../components/NavbarLoja'; // Importa o componente da navbar da loja
+import { CarrinhoContext } from '../contexts/CarrinhoContext.jsx'; // Importa o contexto do carrinho
+import AlertUtils from '../utils/alerts.js'; // Importa utilitários de alertas
+import 'bootstrap/dist/css/bootstrap.min.css'; // Importa CSS do Bootstrap
+import 'bootstrap-icons/font/bootstrap-icons.css'; // Importa ícones do Bootstrap
 
 const LojaProdutoVisualizarPage = () => {
+  // Pega o ID do produto da URL
   const { id } = useParams();
+
+  // Hook de navegação para redirecionar páginas
   const navigate = useNavigate();
+
+  // Função para adicionar o produto ao carrinho
   const { adicionarAoCarrinho } = useContext(CarrinhoContext);
 
+  // Estado do produto carregado da API
   const [produto, setProduto] = useState(null);
+
+  // Estado da imagem atualmente selecionada
   const [imagemSelecionada, setImagemSelecionada] = useState('');
 
+  // Executa ao montar o componente
   useEffect(() => {
-    carregarProduto();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    carregarProduto(); // Busca os dados do produto
   }, []);
 
+  // Função para carregar os dados do produto
   const carregarProduto = async () => {
     try {
-      const response = await api.get(`/produtos/${id}`);
+      const response = await api.get(`/produtos/${id}`); // Requisição GET para buscar o produto
       const produtoCarregado = response.data;
 
+      // Busca a avaliação salva no localStorage (caso exista)
       const avaliacaoLocal = localStorage.getItem(`avaliacao_produto_${id}`);
       produtoCarregado.avaliacao = avaliacaoLocal ? parseFloat(avaliacaoLocal) : 0;
 
+      // Atualiza o estado com os dados carregados
       setProduto(produtoCarregado);
 
+      // Define imagem principal a ser exibida
       if (produtoCarregado.imagemPadrao) {
         setImagemSelecionada(produtoCarregado.imagemPadrao);
       } else if (produtoCarregado.imagens?.length > 0) {
@@ -37,24 +50,29 @@ const LojaProdutoVisualizarPage = () => {
       }
     } catch (error) {
       console.error('Erro ao carregar produto:', error);
-      navigate('/loja');
+      navigate('/loja'); // Redireciona para a loja caso falhe
     }
   };
 
+  // Função para comprar o produto (adiciona ao carrinho)
   const handleComprar = () => {
+    // Verifica se há estoque
     if (!produto || produto.quantidadeEstoque <= 0) {
       AlertUtils.aviso('Produto fora de estoque.');
       return;
     }
 
+    // Adiciona ao carrinho
     const adicionado = adicionarAoCarrinho(produto);
 
+    // Mostra mensagem de sucesso e redireciona para o carrinho
     if (adicionado) {
       AlertUtils.sucesso('Produto adicionado ao carrinho com sucesso!');
       navigate('/carrinho');
     }
   };
 
+  // Enquanto o produto estiver sendo carregado, mostra o spinner
   if (!produto) {
     return (
       <>
@@ -68,6 +86,7 @@ const LojaProdutoVisualizarPage = () => {
     );
   }
 
+  // Renderização principal do componente
   return (
     <>
       <NavbarLoja />
@@ -78,7 +97,7 @@ const LojaProdutoVisualizarPage = () => {
           <div className="col-md-10">
             <div className="card shadow-lg p-4" style={{ borderRadius: '15px' }}>
               
-              {/* Galeria de imagens */}
+              {/* Galeria de imagens em miniatura */}
               <div className="row">
                 <div className="col-md-2 d-flex flex-column align-items-center gap-2">
                   {produto.imagens?.length > 0 ? (
@@ -87,7 +106,7 @@ const LojaProdutoVisualizarPage = () => {
                         key={index}
                         src={`http://localhost:8080/uploads/${img}`}
                         alt={`Miniatura ${produto.nome} ${index + 1}`}
-                        onMouseEnter={() => setImagemSelecionada(img)}
+                        onMouseEnter={() => setImagemSelecionada(img)} // Troca a imagem principal
                         style={{
                           width: '60px',
                           height: '60px',
@@ -104,7 +123,7 @@ const LojaProdutoVisualizarPage = () => {
                   )}
                 </div>
 
-                {/* Imagem principal */}
+                {/* Imagem principal selecionada */}
                 <div className="col-md-10 d-flex justify-content-center align-items-center">
                   {imagemSelecionada ? (
                     <img
@@ -170,7 +189,7 @@ const LojaProdutoVisualizarPage = () => {
                   </span>
                 </div>
 
-                {/* Botões */}
+                {/* Botões de voltar e comprar */}
                 <div className="d-grid gap-2 mt-4">
                   <button
                     className="btn btn-outline-secondary btn-lg"
@@ -197,4 +216,4 @@ const LojaProdutoVisualizarPage = () => {
   );
 };
 
-export default LojaProdutoVisualizarPage;
+export default LojaProdutoVisualizarPage; // Exporta o componente para ser usado nas rotas

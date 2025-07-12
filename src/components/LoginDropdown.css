@@ -1,0 +1,41 @@
+/* src/components/LoginDropdown.css */
+
+.login-dropdown-trigger {
+  display: flex;
+  align-items: center;
+  color: #0d6efd; 
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.login-dropdown-trigger:hover {
+    color: #000; /* preto um pouco mais escuro no hover */
+}
+
+/* O contêiner principal do dropdown */
+.dropdown-container {
+  position: relative;
+}
+
+/* Esconde o menu por padrão */
+.dropdown-container .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  background-color: white;
+  border-radius: 0.5rem; /* Bordas arredondadas como na imagem */
+  border: 1px solid #eee;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  margin-top: 0.25rem; /* Pequeno espaço entre o botão e o menu */
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Exibe o menu quando o mouse está sobre o contêiner */
+.dropdown-container:hover .dropdown-menu {
+  display: block;
+}

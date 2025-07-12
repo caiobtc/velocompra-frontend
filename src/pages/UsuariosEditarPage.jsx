@@ -1,26 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import api from '../services/api.js';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import BackofficeLayout from '../components/BackofficeLayout';
-import AlertUtils from '../utils/alerts.js';
+// Importa hooks do React e utilitários da aplicação
+import { useEffect, useState } from 'react'; // Hook de efeito colateral e estado
+import { useNavigate, useParams } from 'react-router-dom'; // Navegação e parâmetros da URL
+import api from '../services/api.js'; // Módulo de comunicação com a API backend
+import 'bootstrap-icons/font/bootstrap-icons.css'; // Ícones do Bootstrap
+import BackofficeLayout from '../components/BackofficeLayout'; // Layout padrão da área administrativa
+import AlertUtils from '../utils/alerts.js'; // Utilitário para exibir alertas
 
+// Componente da página de edição de usuários
 const UsuariosEditarPage = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
+  const navigate = useNavigate(); // Hook para redirecionamento de rotas
+  const { id } = useParams(); // Obtém o ID do usuário pela URL
 
+  // Estados controlados para os campos do formulário
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
   const [grupo, setGrupo] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
+  // Hook de efeito: executa ao carregar a página ou quando o ID mudar
   useEffect(() => {
+    // Função assíncrona para buscar os dados do usuário
     const carregarUsuario = async () => {
       try {
-        const response = await api.get(`/usuarios/${id}`);
-        const usuario = response.data;
+        const response = await api.get(`/usuarios/${id}`); // Busca o usuário pelo ID
+        const usuario = response.data; // Extrai os dados
 
+        // Atualiza os campos com os dados recebidos
         setNome(usuario.nome);
         setCpf(usuario.cpf);
         setGrupo(usuario.grupo);
@@ -30,61 +36,74 @@ const UsuariosEditarPage = () => {
       }
     };
 
-    carregarUsuario();
-  }, [id]);
+    carregarUsuario(); // Chama a função de carregamento
+  }, [id]); // Dependência do efeito: roda quando o `id` mudar
 
+  // Função de validação de CPF (padrão brasileiro)
   const validarCPF = (cpf) => {
-    cpf = cpf.replace(/[^\d]+/g, '');
-    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+    cpf = cpf.replace(/[^\d]+/g, ''); // Remove caracteres não numéricos
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false; // Verifica tamanho e repetição
+
+    // Primeiro dígito verificador
     let soma = 0;
     let resto;
     for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
     resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
     if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+    // Segundo dígito verificador
     soma = 0;
     for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
     resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
+
     return resto === parseInt(cpf.substring(10, 11));
   };
 
+  // Função que trata o envio do formulário
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // Impede o recarregamento da página
 
+    // Validação: nome e CPF obrigatórios
     if (!nome.trim() || !cpf.trim()) {
       AlertUtils.aviso('Nome e CPF são obrigatórios!');
       return;
     }
 
+    // Validação do CPF
     if (!validarCPF(cpf)) {
       AlertUtils.aviso('CPF inválido!');
       return;
     }
 
+    // Validação de senha (se foi preenchida)
     if (senha && senha !== confirmarSenha) {
       AlertUtils.aviso('As senhas não coincidem!');
       return;
     }
 
     try {
+      // Monta o objeto com os dados a serem enviados
       const payload = { nome, cpf, grupo };
-      if (senha) payload.senha = senha;
+      if (senha) payload.senha = senha; // Só envia senha se estiver preenchida
 
-      await api.put(`/usuarios/${id}`, payload);
+      await api.put(`/usuarios/${id}`, payload); // Atualiza o usuário via PUT
 
       AlertUtils.sucesso('Usuário atualizado com sucesso!');
-      navigate('/usuarios');
+      navigate('/usuarios'); // Redireciona para a lista de usuários
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
       AlertUtils.erro('Erro ao atualizar usuário. Verifique o console.');
     }
   };
 
+  // Função para cancelar e voltar
   const handleCancelar = () => {
-    navigate('/usuarios');
+    navigate('/usuarios'); // Redireciona para a lista de usuários
   };
 
+  // JSX da interface
   return (
     <BackofficeLayout>
       <div className="d-flex justify-content-center">
@@ -92,6 +111,7 @@ const UsuariosEditarPage = () => {
           <h3 className="fw-bold text-center mb-4">Editar Usuário</h3>
 
           <form onSubmit={handleSubmit}>
+            {/* Campo: Nome */}
             <div className="mb-3">
               <label className="form-label">Nome</label>
               <input
@@ -103,6 +123,7 @@ const UsuariosEditarPage = () => {
               />
             </div>
 
+            {/* Campo: CPF */}
             <div className="mb-3">
               <label className="form-label">CPF</label>
               <input
@@ -114,6 +135,7 @@ const UsuariosEditarPage = () => {
               />
             </div>
 
+            {/* Campo: Grupo */}
             <div className="mb-3">
               <label className="form-label">Grupo</label>
               <select
@@ -128,6 +150,7 @@ const UsuariosEditarPage = () => {
               </select>
             </div>
 
+            {/* Campo: Nova senha (opcional) */}
             <div className="mb-3">
               <label className="form-label">Nova Senha (opcional)</label>
               <input
@@ -138,6 +161,7 @@ const UsuariosEditarPage = () => {
               />
             </div>
 
+            {/* Campo: Confirmação de nova senha */}
             <div className="mb-3">
               <label className="form-label">Confirmar Nova Senha</label>
               <input
@@ -148,6 +172,7 @@ const UsuariosEditarPage = () => {
               />
             </div>
 
+            {/* Botões de ação */}
             <div className="d-grid gap-2">
               <button type="submit" className="btn btn-success btn-lg">
                 <i className="bi bi-save me-2"></i> Salvar
@@ -164,4 +189,5 @@ const UsuariosEditarPage = () => {
   );
 };
 
+// Exporta o componente para uso em outras partes do app
 export default UsuariosEditarPage;
